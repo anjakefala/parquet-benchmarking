@@ -18,7 +18,8 @@ def test_integers():
     pq.write_table(table, 'integers.parquet')
 
 def test_many_short_strings():
-    df = pd.DataFrame(generate_strings(1000000, 1000), columns=['str'])
+    # 1000000000 rows of strings length 1000, the process dies
+    df = pd.DataFrame(generate_strings(100000000, 1000), columns=['str'])
     table = pa.Table.from_pandas(df)
     pq.write_table(table, 'strings.parquet')
 
