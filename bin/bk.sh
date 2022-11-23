@@ -4,7 +4,6 @@
 
 set -e
 set -x
-
 VALGRIND="valgrind --tool=massif --pages-as-heap=yes"
 
 if [ -z "$1" ] ; then
@@ -12,10 +11,10 @@ if [ -z "$1" ] ; then
   TESTS="experiments/exp*.py"
 else
   # bk.sh testname; run experiments/exp[testname].py
-  TESTS="experiments/exp$1.py"
+  TESTS="experiments/exp_$1.py"
 fi
 
 for i in $TESTS ; do
   echo "--- $i"
-  $VALGRIND python3 $i
+  PYTHONMALLOC=malloc_debug $VALGRIND python $i
 done
