@@ -1,8 +1,7 @@
-import pyarrow as pa
+from pyarrow import Table
 import pyarrow.parquet as pq
 
-import numpy as np
-import pandas as pd
+from pandas import DataFrame
 from pandas.util.testing import rands
 
 def generate_strings(nrows, nunique, string_length=10):
@@ -10,17 +9,10 @@ def generate_strings(nrows, nunique, string_length=10):
     values = unique_values * (nrows // nunique)
     return values
 
-def test_integers():
-    df = pd.DataFrame(np.random.randint(0,1000000000,size=(100000000, 4)), columns=list('ABCD'))
-
-    table = pa.Table.from_pandas(df)
-
-    pq.write_table(table, 'integers.parquet')
-
 def test_many_short_strings():
     # 1000000000 rows of strings length 1000, the process dies
-    df = pd.DataFrame(generate_strings(100000000, 1000), columns=['str'])
-    table = pa.Table.from_pandas(df)
+    df = DataFrame(generate_strings(100000000, 1000), columns=['str'])
+    table = Table.from_pandas(df)
     pq.write_table(table, 'strings.parquet')
 
 test_many_short_strings()
